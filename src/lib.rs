@@ -383,16 +383,9 @@ pub fn calculator<'a>() -> Parser<CalcExp<'a>, CalcErr<'a>, CalcMemory<'a>, impl
 
 #[test]
 pub fn test_calculator() {
+    let bump = Bump::new();
+    let bump = &bump;
     let calc = calculator().end().boxed();
-    let bump = {
-        let bump: &'static Bump = Box::leak(Box::new(Bump::new()));
-        for _ in 0..10000 {
-            let mut memory = CalcMemory { bump, visited: bumpalo::collections::Vec::new_in(bump), recorded: bumpalo::collections::Vec::new_in(bump) };
-            println!("{:?}", calc.parse("1 /2+4*3* /4", &mut memory).unwrap_err());
-        }
-        bump
-    };
-    unsafe {
-        drop(Box::from_raw(bump as *const _ as *mut Bump));
-    }
+    let mut memory = CalcMemory { bump, visited: bumpalo::collections::Vec::new_in(bump), recorded: bumpalo::collections::Vec::new_in(bump) };
+    println!("{:?}", calc.parse("1 /2+4*3* /4", &mut memory).unwrap_err());
 }
