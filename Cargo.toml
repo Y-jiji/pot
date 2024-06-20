@@ -1,0 +1,10 @@
+[package]
+name = "pratt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+auto_impl = "1.2.0"
+bumpalo = { version = "3.16.0", features = ["collections", "boxed"] }
+log = "0.4.21"
+thiserror = "1.0.61"
