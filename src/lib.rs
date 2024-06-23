@@ -383,9 +383,11 @@ pub fn calculator<'a>() -> Parser<CalcExp<'a>, CalcErr<'a>, CalcMemory<'a>, impl
 
 #[test]
 pub fn test_calculator() {
-    let bump = Bump::new();
-    let bump = &bump;
     let calc = calculator().end().boxed();
-    let mut memory = CalcMemory { bump, visited: bumpalo::collections::Vec::new_in(bump), recorded: bumpalo::collections::Vec::new_in(bump) };
-    println!("{:?}", calc.parse("1 /2+4*3* /4", &mut memory).unwrap_err());
+    for _ in 0..10 {
+        let bump = Bump::new();
+        let bump = &bump;
+        let mut memory = CalcMemory { bump, visited: bumpalo::collections::Vec::new_in(bump), recorded: bumpalo::collections::Vec::new_in(bump) };
+        println!("{:?}", calc.parse("1 /2+4*3* /4", &mut memory).unwrap_err());
+    }
 }
